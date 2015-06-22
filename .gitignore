@@ -1,0 +1,2 @@
+# Ignore all generate bytecode files
+*.pyc
