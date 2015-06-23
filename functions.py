@@ -4,6 +4,8 @@ be used repeatedly throughout the introduction to finance course.
 
 Date created is 22 Jun 2015.
 '''
+from decimal import Decimal, getcontext
+getcontext().prec = 20	# Set the precision to very high order for maximal accuracy
 
 def future_value(present_value, interest_rate, period_count):
 	'''
@@ -13,9 +15,11 @@ def future_value(present_value, interest_rate, period_count):
 	* interest_rate should be given in its original percentage, eg. 
 	5% instead of 0.05
 	'''
-	# We must add the decimal to 100.0 to ensure that we do not round to
-	# integer
-	return (1 + (interest_rate/100.0))**period_count * present_value
+	# Convert all integers or floats into Decimal objects to maximize precision and
+	# eliminate rounding off errors in between computations
+	pv, ir, pc = Decimal(present_value), Decimal(interest_rate), Decimal(period_count)
+	# leave 100 as integer since Decimal objects cannot be divided by floats
+	return (1 + (ir/100))**pc * pv
 
 def present_value(future_value, interest_rate, period_count):
 	'''
@@ -25,4 +29,5 @@ def present_value(future_value, interest_rate, period_count):
 	* interest_rate should be given in its original percentage, eg. 
 	5% instead of 0.05
 	'''
-	return future_value/((1 + (interest_rate/100.0))**period_count)
+	fv, ir, pc = Decimal(future_value), Decimal(interest_rate), Decimal(period_count)
+	return fv/((1 + (ir/100))**pc)
