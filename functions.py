@@ -17,3 +17,12 @@ def future_value(present_value, interest_rate, period_count):
 	# integer
 	return (1 + (interest_rate/100.0))**period_count * present_value
 
+def present_value(future_value, interest_rate, period_count):
+	'''
+	Function to compute the Present Value based on interest rate and 
+	a given future value. 
+
+	* interest_rate should be given in its original percentage, eg. 
+	5% instead of 0.05
+	'''
+	return future_value/((1 + (interest_rate/100.0))**period_count)
