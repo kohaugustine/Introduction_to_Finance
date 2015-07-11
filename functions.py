@@ -79,6 +79,40 @@ def present_value(r, n, fv = None, pmt = None):
 		return sum(all_compounded_pmt)
 
 
+def payment(r, n, pv = None, fv = None):
+	'''
+	Function to compute value of each annuity payment based on given interest rate,
+	number of periods (in years), present value and future values. 
+
+	Arguments accepted
+	------------------
+	* r = interest rate, which should be given in its original percentage, eg. 
+	5% instead of 0.05
+
+	* n = number of periods for which the annuity cash flow should be paid
+	
+	* pv = present value in dollars
+
+	* fv = future value in dollars
+	
+	** If either present or future values are 0 or unknown, just leave that 
+	argument blank
+	'''
+	original_args = [r, n, pv, fv]
+	dec_args = [Decimal(arg) if arg != None else arg for arg in original_args]
+
+	# Case when pv is specified, but fv is not specified
+	if dec_args[3] == None:
+		annuity_length = range(1, dec_args[1]+1)
+		discount_factor = [(1/((1+dec_args[0]/100) ** time_left)) for time_left in annuity_length]
+		return dec_args[2] / sum(discount_factor)
+
+	# Case when fv is specified but pv is not specified
+	elif dec_args[2] == None:
+		annuity_length = range(1, dec_args[1]+1)
+		compound_factor = [(1 + dec_args[0]/100) ** (time_left - 1) for time_left in annuity_length]
+		return dec_args[3] / sum(compound_factor)
+
 '''
 TODO: Consider abstracting the two functions into a base class for computing results with interest
 '''
