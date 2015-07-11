@@ -113,6 +113,20 @@ def payment(r, n, pv = None, fv = None):
 		compound_factor = [(1 + dec_args[0]/100) ** (time_left - 1) for time_left in annuity_length]
 		return dec_args[3] / sum(compound_factor)
 
+def effective_annual_rate(qr, m):
+	'''
+	Function to compute the effective annual rate (EAR) based on a stated 
+	interest rate.
+
+	Arguments accepted
+	------------------
+	* qr = stated (also known as quoted) interest rate
+
+	* m = total number of times within a year that the stated/quoted interest 
+	rate gets compounded
+	'''
+	return ((1 + (Decimal(qr)/100)/Decimal(m)) ** Decimal(m) - 1) * 100
+
 '''
 TODO: Consider abstracting the two functions into a base class for computing results with interest
 '''
