@@ -22,7 +22,7 @@ def future_value(r, n, pv = None, pmt = None):
 
 	* pv = present value in dollars, if problem is annuity based, leave this empty
 
-	* pmt = each annuity payment in dollars, if problem is present value based, 
+	* pmt = each annuity payment in dollars, if problem is single cash flow based, 
 	leave this empty
 	'''
 	original_args = [r, n, pv, pmt]
@@ -31,28 +31,53 @@ def future_value(r, n, pv = None, pmt = None):
 	# unchanged as they are back in the same position of the list
 	dec_args = [Decimal(arg) if arg != None else arg for arg in original_args]
 
+	# Carry out single cash flow FV calculation if no annuity was specified
 	if dec_args[3] == None:
 		# leave 100 as integer since Decimal objects cannot be divided by floats
 		return (1 + (dec_args[0]/100))**dec_args[1] * dec_args[2]
+
+	# Carry out annuity FV calculation if no single cash flow was specified
 	elif dec_args[2] == None:
 		annuity_length = range(1, dec_args[1]+1)
 		# Apply compounding to each annuity payment made based on the number of 
 		# years left till end 
-		all_compounded_annuity = [(1 + (dec_args[0]/100))**(dec_args[1]-time_left) * dec_args[3] for time_left in annuity_length]
-		return sum(all_compounded_annuity)
+		all_compounded_pmt = [(1 + (dec_args[0]/100))**(dec_args[1]-time_left) * dec_args[3] for time_left in annuity_length]
+		return sum(all_compounded_pmt)
 
+	# TODO: Make my function flexible to accept monthly interest rates too
 		
 
-def present_value(future_value, interest_rate, period_count):
+def present_value(r, n, fv = None, pmt = None):
 	'''
 	Function to compute the Present Value based on interest rate and 
 	a given future value. 
 
-	* interest_rate should be given in its original percentage, eg. 
+	Arguments accepted
+	------------------
+	* r = interest rate, which should be given in its original percentage, eg. 
 	5% instead of 0.05
+
+	* n = number of periods for which the cash flow, either as annuity or single
+	flow from one present value
+
+	* fv = future value in dollars, if problem is annuity based, leave this empty
+
+	* pmt = each annuity payment in dollars, if problem is single cash flow based, 
+	leave this empty
 	'''
-	fv, ir, pc = Decimal(future_value), Decimal(interest_rate), Decimal(period_count)
-	return fv/((1 + (ir/100))**pc)
+	original_args = [r, n, fv, pmt]
+	dec_args = [Decimal(arg) if arg != None else arg for arg in original_args]
+	
+	if dec_args[3] == None:
+		return dec_args[2]/((1 + (dec_args[0]/100))**dec_args[1])
+
+	elif dec_args[2] == None:
+		annuity_length = range(1, dec_args[1]+1)
+		# Apply discounting to each annuity payment made according to number of years
+		# left till end
+		all_compounded_pmt = [dec_args[3] * (1/((1+dec_args[0]/100) ** time_left)) for time_left in annuity_length]
+		return sum(all_compounded_pmt)
+
 
 '''
 TODO: Consider abstracting the two functions into a base class for computing results with interest
