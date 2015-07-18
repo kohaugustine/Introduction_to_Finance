@@ -116,12 +116,13 @@ def payment(r, n, pv = None, fv = None):
 def effective_annual_rate(qr, m):
 	'''
 	Function to compute the effective annual rate (EAR) based on a stated 
-	interest rate.
+	interest rate. Returns the EAR value in percentage form, ie. 5% instead of 
+	0.05.
 
 	Arguments accepted
 	------------------
-	* qr = stated (also known as quoted) interest rate
-
+	* qr = stated (also known as quoted) interest rate which should be given in its original percentage, eg. 
+	5% instead of 0.05
 	* m = total number of times within a year that the stated/quoted interest 
 	rate gets compounded
 	'''
