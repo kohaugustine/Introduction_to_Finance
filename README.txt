@@ -13,3 +13,8 @@ the course rules, where we are not allowed to post the answers to any of the que
 on the course forums, and the course instructors of TAs will never release
 any exact answers to any of the problems, I have excluded my IPython notebooks from 
 this repostory.
+
+### Change on 3 April 2016 ###
+Seeing that the online coursera course has been revamped and modified so 
+much, that it seems its no longer free too, I believe the assignments have 
+changed a lot, and it should be safe to commit my work up here too.
